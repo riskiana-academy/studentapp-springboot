@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -55,48 +56,43 @@ public class StudentService {
         return student;
     }
 
-    // public void deleteStudent(String nim) {
-    // Optional<Student> studentOptional = students.stream()
-    // .filter(student -> student.getNim().equals(nim))
-    // .findFirst();
+    public void deleteStudent(String nim) {
+        Optional<StudentEntity> studentOptional = studentRepository.findByNim(nim);
 
-    // if (studentOptional.isPresent()) {
-    // Student studentToBeDeleted = studentOptional.get();
-    // students.remove(studentToBeDeleted);
-    // } else {
-    // throw new RuntimeException("Student with nim " + nim + " not found");
+        if (studentOptional.isPresent()) {
+            StudentEntity studentToBeDeleted = studentOptional.get();
+            studentRepository.delete(studentToBeDeleted);
+        } else {
+            throw new RuntimeException("Student with nim " + nim + " not found");
 
-    // }
+        }
 
-    // }
+    }
 
-    // public Student updateStudent(String nim, StudentRequest request) {
-    // Optional<Student> studentOptional = students.stream()
-    // .filter(student -> student.getNim().equals(nim))
-    // .findFirst();
-    // if (studentOptional.isPresent()) {
-    // Student updatedStudent = studentOptional.get();
-    // updatedStudent.setFullName(request.getFullName());
-    // updatedStudent.setDob(request.getDob());
-    // updatedStudent.setAddress(request.getAddress());
-    // return updatedStudent;
-    // } else {
-    // throw new RuntimeException("Student with nim " + nim + " not found");
+    public Student updateStudent(String nim, StudentRequest request) {
+        Optional<StudentEntity> studentOptional = studentRepository.findByNim(nim);
+        if (studentOptional.isPresent()) {
+            StudentEntity updatedStudent = studentOptional.get();
+            updatedStudent.setFullName(request.getFullName());
+            updatedStudent.setDob(request.getDob());
+            updatedStudent.setAddress(request.getAddress());
+            studentRepository.save(updatedStudent);
+            return mapToDto(updatedStudent);
+        } else {
+            throw new RuntimeException("Student with nim " + nim + " not found");
 
-    // }
+        }
 
-    // }
+    }
 
-    // public Student findStudent(String nim) {
-    // Optional<Student> studentOptional = students.stream()
-    // .filter(student -> student.getNim().equals(nim))
-    // .findFirst();
+    public Student findStudent(String nim) {
+        Optional<StudentEntity> studentOptional = studentRepository.findByNim(nim);
 
-    // if(studentOptional.isPresent()){
-    // return studentOptional.get();
-    // } else{
-    // throw new RuntimeException("Student with nim " + nim + " not found");
-    // }
-    // }
+        if (studentOptional.isPresent()) {
+            return mapToDto(studentOptional.get());
+        } else {
+            throw new RuntimeException("Student with nim " + nim + " not found");
+        }
+    }
 
 }
