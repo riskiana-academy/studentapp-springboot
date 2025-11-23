@@ -51,7 +51,7 @@ public class StudentController {
     @DeleteMapping("/{nim}")
     public ResponseEntity<?> removeStudent(@PathVariable String nim) {
         studentService.deleteStudent(nim);
-        return ResponseEntity.ok("Successfully deleted"); // 200 OK
+        return ResponseEntity.ok("Successfully deleted"); 
 
     }
 
@@ -64,14 +64,9 @@ public class StudentController {
     }
 
     @GetMapping("/{nim}")
-    public Object findStudent(@PathVariable String nim) {
-        try {
-            return studentService.findStudent(nim);
+    public ResponseEntity<?> findStudent(@PathVariable String nim) {
 
-        } catch (Exception e) {
-            return e.getMessage();
-
-        }
+        return ResponseEntity.ok(studentService.findStudent(nim));
 
     }
 
