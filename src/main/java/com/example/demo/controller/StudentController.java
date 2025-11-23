@@ -49,23 +49,17 @@ public class StudentController {
     }
 
     @DeleteMapping("/{nim}")
-    public String removeStudent(@PathVariable String nim) {
-        try {
-            studentService.deleteStudent(nim);
-            return "Successfully deleted";
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+    public ResponseEntity<?> removeStudent(@PathVariable String nim) {
+        studentService.deleteStudent(nim);
+        return ResponseEntity.ok("Successfully deleted"); // 200 OK
 
     }
 
     @PutMapping("/{nim}")
-    public Object updateStudent(@PathVariable String nim, @RequestBody StudentRequest studentRequest) {
-        try {
-            return studentService.updateStudent(nim, studentRequest);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+    public ResponseEntity<?> updateStudent(@PathVariable String nim, @RequestBody StudentRequest studentRequest) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(studentService.updateStudent(nim, studentRequest));
 
     }
 

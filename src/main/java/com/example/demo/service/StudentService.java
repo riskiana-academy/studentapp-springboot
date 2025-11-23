@@ -30,20 +30,21 @@ public class StudentService {
 
     public Student addStudent(StudentRequest request) {
 
-        boolean existing = studentRepository.existsByFullNameAndDob(request.getFullName(),
+        boolean exists = studentRepository.existsByFullNameAndDob(request.getFullName(),
                 request.getDob());
-        if (existing) {
-            throw new RuntimeException("Data already exists");
-        } else {
-            StudentEntity entity = new StudentEntity();
-            entity.setNim(generateNIM());
-            entity.setFullName(request.getFullName());
-            entity.setDob(request.getDob());
-            entity.setAddress(request.getAddress());
 
-            StudentEntity savedEntity = studentRepository.save(entity);
-            return mapToDto(savedEntity);
+        if (exists) {
+            throw new RuntimeException("Data already exists");
         }
+
+        StudentEntity entity = new StudentEntity();
+        entity.setNim(generateNIM());
+        entity.setFullName(request.getFullName());
+        entity.setDob(request.getDob());
+        entity.setAddress(request.getAddress());
+
+        StudentEntity savedEntity = studentRepository.save(entity);
+        return mapToDto(savedEntity);
 
     }
 
@@ -58,42 +59,29 @@ public class StudentService {
     }
 
     public void deleteStudent(String nim) {
-        Optional<StudentEntity> studentOptional = studentRepository.findByNim(nim);
-
-        if (studentOptional.isPresent()) {
-            StudentEntity studentToBeDeleted = studentOptional.get();
-            studentRepository.delete(studentToBeDeleted);
-        } else {
-            throw new RuntimeException("Student with nim " + nim + " not found");
-
-        }
+        StudentEntity entity = getStudentByNim(nim);
+        studentRepository.delete(entity);
 
     }
 
     public Student updateStudent(String nim, StudentRequest request) {
-        Optional<StudentEntity> studentOptional = studentRepository.findByNim(nim);
-        if (studentOptional.isPresent()) {
-            StudentEntity updatedStudent = studentOptional.get();
-            updatedStudent.setFullName(request.getFullName());
-            updatedStudent.setDob(request.getDob());
-            updatedStudent.setAddress(request.getAddress());
-            studentRepository.save(updatedStudent);
-            return mapToDto(updatedStudent);
-        } else {
-            throw new RuntimeException("Student with nim " + nim + " not found");
-
-        }
+        StudentEntity entity = getStudentByNim(nim);
+        entity.setFullName(request.getFullName());
+        entity.setDob(request.getDob());
+        entity.setAddress(request.getAddress());
+        studentRepository.save(entity);
+        return mapToDto(entity);
 
     }
 
-    public Student findStudent(String nim) {
-        Optional<StudentEntity> studentOptional = studentRepository.findByNim(nim);
+    private StudentEntity getStudentByNim(String nim) {
+        return studentRepository.findByNim(nim)
+                .orElseThrow(() -> new RuntimeException("Student with NIM " + nim + " not found"));
+    }
 
-        if (studentOptional.isPresent()) {
-            return mapToDto(studentOptional.get());
-        } else {
-            throw new RuntimeException("Student with nim " + nim + " not found");
-        }
+    public Student findStudent(String nim) {
+        StudentEntity entity = getStudentByNim(nim);
+        return mapToDto(entity);
     }
 
 }
