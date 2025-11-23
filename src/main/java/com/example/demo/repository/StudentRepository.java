@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,8 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Integer>
     String findMaxNim();
 
     Optional<StudentEntity> findByNim(@Param("nim") String nim);
+
+    boolean existsByFullNameAndDob(@Param("fullName") String fullName, @Param("dob") LocalDate dob);
 
 
 

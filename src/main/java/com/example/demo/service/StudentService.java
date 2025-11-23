@@ -11,7 +11,6 @@ import com.example.demo.domain.StudentRequest;
 import com.example.demo.entity.StudentEntity;
 import com.example.demo.repository.StudentRepository;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -29,16 +28,23 @@ public class StudentService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     public Student addStudent(StudentRequest request) {
-        StudentEntity entity = new StudentEntity();
-        entity.setNim(generateNIM());
-        entity.setFullName(request.getFullName());
-        entity.setDob(request.getDob());
-        entity.setAddress(request.getAddress());
 
-        StudentEntity savedEntity = studentRepository.save(entity);
-        return mapToDto(savedEntity);
+        boolean existing = studentRepository.existsByFullNameAndDob(request.getFullName(),
+                request.getDob());
+        if (existing) {
+            throw new RuntimeException("Data already exists");
+        } else {
+            StudentEntity entity = new StudentEntity();
+            entity.setNim(generateNIM());
+            entity.setFullName(request.getFullName());
+            entity.setDob(request.getDob());
+            entity.setAddress(request.getAddress());
+
+            StudentEntity savedEntity = studentRepository.save(entity);
+            return mapToDto(savedEntity);
+        }
+
     }
 
     private String generateNIM() {
@@ -48,12 +54,7 @@ public class StudentService {
     }
 
     private Student mapToDto(StudentEntity entity) {
-        Student student = new Student();
-        student.setNim(entity.getNim());
-        student.setFullName(entity.getFullName());
-        student.setAddress(entity.getAddress());
-        student.setDob(entity.getDob());
-        return student;
+        return new Student(entity.getNim(), entity.getFullName(), entity.getDob(), entity.getAddress());
     }
 
     public void deleteStudent(String nim) {

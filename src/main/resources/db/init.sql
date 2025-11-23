@@ -1,0 +1,8 @@
+CREATE DB IF NOT EXISTS studentappdb;
+CREATE TABLE IF NOT EXISTS student(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nim VARCHAR(10) UNIQUE NOT NULL,
+    fullname VARCHAR(50) NOT NULL,
+    address TEXT,
+    dob DATE
+);
