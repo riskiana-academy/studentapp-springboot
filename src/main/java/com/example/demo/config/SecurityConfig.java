@@ -1,6 +1,5 @@
 package com.example.demo.config;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -19,10 +18,12 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorize -> authorize
-            .anyRequest().authenticated()
-        )
-        .httpBasic(Customizer.withDefaults());
+        http.csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(authorize -> authorize
+                .anyRequest().authenticated()
+            )
+            .httpBasic(Customizer.withDefaults())
+            .formLogin(Customizer.withDefaults());
 
         return http.build();
     }
@@ -32,7 +33,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(){
         UserDetails user = org.springframework.security.core.userdetails.User.builder()
         .username("user")
-        .password(passwordEncoder().encode("password"))
+        .password(passwordEncoder().encode("1234"))
         .roles("USER")
         .build();
 
