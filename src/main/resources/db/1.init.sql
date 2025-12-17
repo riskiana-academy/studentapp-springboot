@@ -6,3 +6,5 @@ CREATE TABLE IF NOT EXISTS student(
     address TEXT,
     dob DATE
 );
+
+

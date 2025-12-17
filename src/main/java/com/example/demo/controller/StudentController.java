@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,11 +34,13 @@ public class StudentController {
     }
 
     @GetMapping
+    @PostMapping
     public List<Student> getStudents() {
         return studentService.getStudents();
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createStudent(@Valid @RequestBody StudentRequest studentRequest,
             BindingResult bindingResult) {
         ResponseEntity<?> errorResponse = validateRequest(bindingResult);
@@ -49,6 +52,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{nim}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> removeStudent(@PathVariable String nim) {
         studentService.deleteStudent(nim);
         return ResponseEntity.ok("Successfully deleted"); 
@@ -56,6 +60,7 @@ public class StudentController {
     }
 
     @PutMapping("/{nim}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateStudent(@PathVariable String nim, @RequestBody StudentRequest studentRequest) {
 
         return ResponseEntity.status(HttpStatus.OK)
