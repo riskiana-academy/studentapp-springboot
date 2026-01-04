@@ -2,6 +2,7 @@ package com.example.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,10 +28,10 @@ public class SecurityConfig implements UserDetailsService {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                     .requestMatchers("/students/**").authenticated()
-                    .anyRequest().authenticated()
-                )
-                .formLogin(form -> form.defaultSuccessUrl("/dashboard.html", true)) 
+                        .requestMatchers("/students/**").authenticated()
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .formLogin(form -> form.defaultSuccessUrl("/dashboard.html", true))
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login"));
 
