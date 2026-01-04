@@ -1,48 +1,57 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Students</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Students</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body class="container mt-4">
 
-<h3>Student List</h3>
+  <h3>Student List</h3>
+  <a href="/dashboard.html" class="btn btn-secondary mb-3">Back to Dashboard</a>
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>NIM</th>
-      <th>Name</th>
-      <th>Address</th>
-      <th>Date of Birth</th>
-    </tr>
-  </thead>
-  <tbody id="studentTable"></tbody>
-</table>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>NIM</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Date of Birth</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="studentTable"></tbody>
+  </table>
 
-<script>
+  <script>
     fetch('/students')
-  .then(response => {
-    if (response.status === 403) {
-      alert("Access denied!");
-      window.location.href = "/dashboard.html";
-      return;
-    }
-    return response.json();
-  })
-  .then(data => {
-    const table = document.getElementById("studentTable");
-    data.forEach(s => {
-      table.innerHTML += `
+      .then(response => {
+        if (response.status === 403) {
+          alert("Access denied!");
+          window.location.href = "/dashboard.html";
+          return;
+        }
+        return response.json();
+      })
+      .then(data => {
+        const table = document.getElementById("studentTable");
+        data.forEach(s => {
+          table.innerHTML += `
         <tr>
           <td>${s.nim}</td>
           <td>${s.fullName}</td>
           <td>${s.address}</td>
           <td>${s.dob}</td>
+          <td>
+            <a href="/edit_student.html?nim=${s.nim}" class="btn btn-primary btn-sm">Edit</a>
+            <a href="/delete_student.html?nim=${s.nim}" class="btn btn-danger btn-sm">Delete</a>
+          </td>
         </tr>
       `;
-    });
-  });
-</script>
+        });
+      });
+  </script>
 </body>
+
 </html>
