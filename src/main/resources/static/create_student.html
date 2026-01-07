@@ -20,6 +20,10 @@
             <input type="text" class="form-control" id="address">
         </div>
         <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="Email">
+        </div>
+        <div class="mb-3">
             <label for="dob" class="form-label">Date of Birth</label>
             <input type="date" class="form-control" id="dob" required>
         </div>
@@ -34,6 +38,7 @@
             const fullName = document.getElementById('fullName').value;
             const address = document.getElementById('address').value;
             const dob = document.getElementById('dob').value;
+            const email = document.getElementById('Email').value;
             const errorDiv = document.getElementById('formError');
 
             errorDiv.textContent = '';
@@ -41,7 +46,8 @@
             const studentData = {
                 fullName: fullName,
                 address: address,
-                dob: dob
+                dob: dob,
+                email: email
             };
 
             fetch('/students', {

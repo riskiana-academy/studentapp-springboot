@@ -32,4 +32,7 @@ public class StudentEntity {
     @Column(name = "dob")
     private LocalDate dob;
 
+    @Column(name = "email")
+    private String email;
+
 }
