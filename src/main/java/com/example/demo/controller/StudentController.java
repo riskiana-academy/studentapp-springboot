@@ -75,6 +75,13 @@ public class StudentController {
 
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> findStudentByEmail(@PathVariable String email) {
+
+        return ResponseEntity.ok(studentService.findStudentByEmail(email));
+
+    }
+
     private ResponseEntity<?> validateRequest(BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();

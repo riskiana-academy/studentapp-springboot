@@ -14,6 +14,7 @@ public class Student {
     private String fullName;
     private LocalDate dob;
     private String address;
+    private String email;
     
         
     

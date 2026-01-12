@@ -17,6 +17,7 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Integer>
     String findMaxNim();
 
     Optional<StudentEntity> findByNim(@Param("nim") String nim);
+    Optional<StudentEntity> findByEmail(@Param("email") String email);
 
     boolean existsByFullNameAndDob(@Param("fullName") String fullName, @Param("dob") LocalDate dob);
 

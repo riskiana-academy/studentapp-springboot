@@ -41,6 +41,7 @@ public class StudentService {
         entity.setFullName(request.getFullName());
         entity.setDob(request.getDob());
         entity.setAddress(request.getAddress());
+        entity.setEmail(request.getEmail());
 
         StudentEntity savedEntity = studentRepository.save(entity);
         return mapToDto(savedEntity);
@@ -54,7 +55,7 @@ public class StudentService {
     }
 
     private Student mapToDto(StudentEntity entity) {
-        return new Student(entity.getNim(), entity.getFullName(), entity.getDob(), entity.getAddress());
+        return new Student(entity.getNim(), entity.getFullName(), entity.getDob(), entity.getAddress(),entity.getEmail());
     }
 
     public void deleteStudent(String nim) {
@@ -68,6 +69,7 @@ public class StudentService {
         entity.setFullName(request.getFullName());
         entity.setDob(request.getDob());
         entity.setAddress(request.getAddress());
+        entity.setEmail(request.getEmail());
         studentRepository.save(entity);
         return mapToDto(entity);
 
@@ -83,4 +85,13 @@ public class StudentService {
         return mapToDto(entity);
     }
 
+    private StudentEntity getStudentByEmail(String email) {
+        return studentRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Student with email " + email + " not found"));
+    }
+
+    public Student findStudentByEmail(String email) {
+        StudentEntity entity = getStudentByEmail(email);
+        return mapToDto(entity);
+    }
 }
